@@ -21,7 +21,7 @@
 	
 </script>
 
-    <link rel="stylesheet" href="fonts/glyphicons-halflings-regular.eot"  >
+    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -40,27 +40,29 @@
 					<a class="list-group-item " href='<c:url value="/admin/home"></c:url>'>Trang Chủ</a>
 					<a class="list-group-item " href='<c:url value="/admin/account"></c:url>'>Quản lý tài khoản</a>
 					<a class="list-group-item active"  href='<c:url value="/admin/book"></c:url>'>Quản lý sách</a>
+					<a class="list-group-item"  href='<c:url value="/admin/author"></c:url>'>Quản lý tác giả</a>
 					<a class="list-group-item"  href='<c:url value="/admin/category"></c:url>'>Quản lý danh mục</a>
-					<a class="list-group-item"  href='<c:url value="#"></c:url>'>Quản lý tác giả</a>
+					<!-- <a class="list-group-item"  href='<c:url value="#"></c:url>'>Quản lý tác giả</a> -->
 					<a class="list-group-item"  href='<c:url value="/admin/order"></c:url>'>Quản lý đơn hàng</a>
 					<a class="list-group-item"  href='<c:url value="/admin/news"></c:url>'>Quản lý tin tức</a>
 					<a class="list-group-item"  href='<c:url value="/admin/contact"></c:url>'>Quản lý liên hệ</a>
-					<a class="list-group-item"  href='<c:url value="#"></c:url>'>Quản lý mã coupon</a>
+					<!-- <a class="list-group-item"  href='<c:url value="#"></c:url>'>Quản lý mã coupon</a> -->
 					<a class="list-group-item"  href='<c:url value="/logout"></c:url>'>Thoát</a>
 				</div>
 			</div>
 			<!-- '<c:url value="/admin/book/manage?action=search"></c:url>' -->
-			<form id="form-search" method="get" action='<c:url value="/admin/book"></c:url>'>
+			<form id="form-search" method="get" action='<c:url value="/admin/book/search"></c:url>'>
 			
 			</form>
 			<div class="col-sm-10">
 				<table class="table table-bordered table-hover text-center">
+					
 					<tr>
 						<td colspan="2"> 
-							<input name="name" id="nameSearch" class="form-control" type="text"  placeholder="Tìm kiếm" form="form-search"> 							
+							<input name="name" id=valueSearch class="form-control" type="text"  placeholder="Tìm kiếm" form="form-search"> 							
 						</td>
 						<td colspan="1"> 
-							<select class="form-control" name="categoryd" form="form-search" id="categorySearch">
+							<select class="form-control" name="category" form="form-search" id="valueCategory">
 								<option value="0">Chọn Danh Mục</option>
 								<c:forEach items="${listCategory}" var="item">
 									<option value="${item.id}">${item.description}</option>
@@ -75,6 +77,9 @@
 						</td>
 						<td>
 							<button class="btn" form="form-search" type="submit">Tìm kiếm</button>
+						</td>
+						<td>
+							<p class="error" id="error_seacrh"></p>
 						</td>
 					
 					</tr>
@@ -151,24 +156,7 @@
 
 
 	<div class="container">
-		<div class="modal" id="modaldelete">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title">Xóa sản phẩm</h1>
-					<button class="close" data-dismiss="modal" type="button">&times;</button>
-				</div>
-				<div class="modal-body">
-					<p>Bạn Có Chắc chắc chắn muốn xóa sản phẩm ko ?</p>
-				</div>
-				<div class="modal-footer">
-					<button class="btn-primary" type="button">Có</button>
-					<button class="btn-dark" type="button">Không</button>
-				</div>
-			</div>
-		</div>
 
-	</div>
 
 	<div class="modal fade" id="mymodal">
 		<div class="modal-dialog">
@@ -327,22 +315,26 @@
 		alertTitle.innerHTML ="";
 	});
 	
-	var formSearch = document.getElementById('form-search');
-	formSearch.addEventListener('submit',function(evt){
-		var name = document.getElementById('nameSearch');
-		var category = document.getElementById('categorySearch');
-		var dateFrom = document.getElementById('dateFrom');
+	
+
+
+	
 		var dateTo = document.getElementById('dateTo');
+		var dateFrom =  document.getElementById('dateFrom');
 		
-		if(category.value==0){
-			category.removeAttribute("name");
-		}
-		if(dateFrom.value == "" || dateTo.value == ""){
-			dateFrom.removeAttribute("name");
-			dateTo.removeAttribute("name");
-		}
+		
+	document.getElementById('form-search').addEventListener('submit',function(evt){
 			
+		var valueDateTo  = new Date(dateTo.value);
+		var valueDateFrom = new Date(dateFrom.value);
+		if(valueDateTo > valueDateFrom){
+			document.getElementById('error_seacrh').innerHTML  = "Ngày bị lỗi";
+			evt.preventDefault();
+		} 
+		
+		
 	});
+	
 	
 </script>
 

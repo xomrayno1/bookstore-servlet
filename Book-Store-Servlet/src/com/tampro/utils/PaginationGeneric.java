@@ -1,12 +1,13 @@
 package com.tampro.utils;
 
+import java.util.List;
+
 public class PaginationGeneric<T> {
 
 	private int start;
 	private int end;
 	private int pageCurrent;
-	private T listWishList;
-	private T listWishPagation;
+	private List<T> listWishList;
 	private int soPage;
 	private int limit;
 	
@@ -14,11 +15,15 @@ public class PaginationGeneric<T> {
 	
 	
 	
-	public T getListWishPagation() {
-		return listWishPagation;
-	}
-	public void setListWishPagation(T listWishPagation) {
-		this.listWishPagation = listWishPagation;
+
+	
+	public PaginationGeneric(int start, int end, int pageCurrent, List<T> listWishList, int limit) {
+	
+		this.start = start;
+		this.end = end;
+		this.pageCurrent = pageCurrent;
+		this.listWishList = listWishList;
+		this.limit = limit;
 	}
 	public int getLimit() {
 		return limit;
@@ -47,16 +52,24 @@ public class PaginationGeneric<T> {
 	public int getSoPage() {
 		return soPage;
 	}
-	public T getListWishList() {
+	public List<T> getListWishList() {
 		return listWishList;
 	}
-	public void setListWishList(T listWishList) {
+	public void setListWishList(List<T> listWishList) {
 		this.listWishList = listWishList;
 	}
-	public void setSoPage(int soPage) {
-		this.soPage = soPage;
-	}
+	
 
+
+	public void setTotalPage() {
+		soPage =  0;
+		if(listWishList.size() % limit == 0) {
+			soPage = listWishList.size() / limit;
+		}else{
+			soPage = (listWishList.size() / limit) + 1;
+		}
+	}
+	
 	
 
 	

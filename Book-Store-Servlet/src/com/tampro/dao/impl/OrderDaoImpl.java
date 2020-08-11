@@ -104,8 +104,43 @@ public class OrderDaoImpl  extends RootDao implements OrderDao{
 	}
 
 	@Override
-	public boolean delete(Orders orders) {
-		// TODO Auto-generated method stub
+	public boolean delete(int  id) {
+		String sql = "delete from ORDERS where order_id = ?";
+		Connection connection = null;
+		PreparedStatement statement = null;		
+		try {
+			connection = getConnection();
+			statement = connection.prepareStatement(sql);
+			
+
+			statement.setInt(1, id);
+			
+			statement.executeUpdate();
+			
+			return true;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
 		return false;
 	}
 
@@ -305,6 +340,351 @@ public class OrderDaoImpl  extends RootDao implements OrderDao{
 		}
 		
 		return null;
+	}
+
+	@Override
+	public List<Orders> getAllOrderByIdUser(int idUser) {
+		String sql = "select * from  orders where user_id = ? order by order_id desc";
+		Connection connection = null;
+		PreparedStatement statement = null;		
+		try {
+			connection = getConnection();
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, idUser);
+			ResultSet rs = statement.executeQuery();
+			List<Orders> listOrder = new ArrayList<Orders>();
+			while(rs.next()) {
+				Orders orders  = new Orders();
+				Users user = userDao.getUserById(rs.getInt("user_id"));
+				orders.setId(rs.getInt("order_id"));
+				orders.setTotalPrice(rs.getInt("order_TotalPrice"));
+				orders.setDate(rs.getDate("order_Date"));
+				orders.setUsers(user);
+				orders.setStatus(rs.getInt("status"));
+				orders.setIdAddress(rs.getInt("address_id"));
+				listOrder.add(orders);
+			}
+			return listOrder;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return null;
+	}
+
+	@Override
+	public List<Orders> getAllOrderByIdUser(int idUser, int start, int end) {
+		String sql = "select * from  orders where user_id = ? order by status desc,order_id desc limit ?,?";
+		Connection connection = null;
+		PreparedStatement statement = null;		
+		try {
+			connection = getConnection();
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, idUser);
+			statement.setInt(2, start);
+			statement.setInt(3, end);
+			ResultSet rs = statement.executeQuery();
+			List<Orders> listOrder = new ArrayList<Orders>();
+			while(rs.next()) {
+				Orders orders  = new Orders();
+				Users user = userDao.getUserById(rs.getInt("user_id"));
+				orders.setId(rs.getInt("order_id"));
+				orders.setTotalPrice(rs.getInt("order_TotalPrice"));
+				orders.setDate(rs.getDate("order_Date"));
+				orders.setUsers(user);
+				orders.setStatus(rs.getInt("status"));
+				orders.setIdAddress(rs.getInt("address_id"));
+				listOrder.add(orders);
+			}
+			return listOrder;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return null;
+	}
+
+	@Override
+	public List<Orders> getAllStatistical(int start, int end) {
+		String sql = "select od.order_id,od.order_TotalPrice,od.order_Date,users.users_Username,users.users_Email"
+				+ ",address.name,pr._name as Province,dt._name as District , od.status from orders od "
+				+ " inner join address on address_id = address.id "
+				+ "inner join 	users ON user_id = users.users_id "
+				+ " inner join province pr on pr.id = address.provincial"
+				+ " inner join district dt on dt.id = address.district limit ?,?";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;		
+		try {
+			connection = getConnection();
+			statement = connection.prepareStatement(sql);			
+			statement.setInt(1, start);
+			statement.setInt(2, end);
+			ResultSet rs = statement.executeQuery();
+			List<Orders> listOrder = new ArrayList<Orders>();
+			while(rs.next()) {
+				Orders orders  = new Orders();
+				Users user = userDao.getUserById(rs.getInt("user_id"));
+				orders.setId(rs.getInt("order_id"));
+				orders.setTotalPrice(rs.getInt("order_TotalPrice"));
+				orders.setDate(rs.getDate("order_Date"));
+				orders.setUsers(user);
+				orders.setStatus(rs.getInt("status"));
+				orders.setIdAddress(rs.getInt("address_id"));
+				listOrder.add(orders);
+			}
+			return listOrder;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return null;
+	}
+
+	@Override
+	public List<Orders> getAlStatistical() {
+		String sql = "select od.order_id,od.order_TotalPrice,od.order_Date,users.users_Username,users.users_Email"
+				+ ",address.name,pr._name as Province,dt._name as District , od.status from orders od "
+				+ " inner join address on address_id = address.id "
+				+ "inner join 	users ON user_id = users.users_id "
+				+ " inner join province pr on pr.id = address.provincial"
+				+ " inner join district dt on dt.id = address.district";
+		Connection connection = null;
+		PreparedStatement statement = null;		
+		try {
+			connection = getConnection();
+			statement = connection.prepareStatement(sql);			
+			ResultSet rs = statement.executeQuery();
+			List<Orders> listOrder = new ArrayList<Orders>();
+			while(rs.next()) {
+				Orders orders  = new Orders();
+				Users user = userDao.getUserById(rs.getInt("user_id"));
+				orders.setId(rs.getInt("order_id"));
+				orders.setTotalPrice(rs.getInt("order_TotalPrice"));
+				orders.setDate(rs.getDate("order_Date"));
+				orders.setUsers(user);
+				orders.setStatus(rs.getInt("status"));
+				orders.setIdAddress(rs.getInt("address_id"));
+				listOrder.add(orders);
+			}
+			return listOrder;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return null;
+	}
+
+	@Override
+	public List<Orders> getAllOrderByStatus(int status) {
+		String sql = "select * from  orders where status = ?  ";
+		Connection connection = null;
+		PreparedStatement statement = null;		
+		try {
+			connection = getConnection();
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, status);
+			
+			ResultSet rs = statement.executeQuery();
+			List<Orders> listOrder = new ArrayList<Orders>();
+			while(rs.next()) {
+				Orders orders  = new Orders();
+				Users user = userDao.getUserById(rs.getInt("user_id"));
+				orders.setId(rs.getInt("order_id"));
+				orders.setTotalPrice(rs.getInt("order_TotalPrice"));
+				orders.setDate(rs.getDate("order_Date"));
+				orders.setUsers(user);
+				orders.setStatus(rs.getInt("status"));
+				orders.setIdAddress(rs.getInt("address_id"));
+				listOrder.add(orders);
+			}
+			return listOrder;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return null;
+	}
+
+	@Override
+	public List<Orders> getAllOrderByStatusPagi(int status, int start, int end) {
+		String sql = "select * from  orders where status = ? order by order_id desc limit ?,?";
+		Connection connection = null;
+		PreparedStatement statement = null;		
+		try {
+			connection = getConnection();
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, status);
+			statement.setInt(2, start);
+			statement.setInt(3, end);
+			ResultSet rs = statement.executeQuery();
+			List<Orders> listOrder = new ArrayList<Orders>();
+			while(rs.next()) {
+				Orders orders  = new Orders();
+				Users user = userDao.getUserById(rs.getInt("user_id"));
+				orders.setId(rs.getInt("order_id"));
+				orders.setTotalPrice(rs.getInt("order_TotalPrice"));
+				orders.setDate(rs.getDate("order_Date"));
+				orders.setUsers(user);
+				orders.setStatus(rs.getInt("status"));
+				orders.setIdAddress(rs.getInt("address_id"));
+				listOrder.add(orders);
+			}
+			return listOrder;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return null;
+	}
+
+	@Override
+	public boolean checkOrderIdAddress(int idAddress) {
+		String sql = "select * from  orders where address_id =?  ";
+		Connection connection = null;
+		PreparedStatement statement = null;		
+		try {
+			connection = getConnection();
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, idAddress);
+			
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				return true;
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return false;
 	}
 
 }

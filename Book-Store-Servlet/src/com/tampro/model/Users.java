@@ -15,11 +15,13 @@ public class Users {
 	private String role;
 	private Date create_Date;
 	private Date modify_Date;
+	private int status;
 	
 	public Users() {
 		this.role = "ROLE_USER";
 		this.create_Date =  Date.valueOf(LocalDate.now());
 		this.modify_Date =  Date.valueOf(LocalDate.now());
+		status = 1;
 		
 	}
 	public Users(String userName, String passWord, String name, String phone, String email) {
@@ -33,6 +35,7 @@ public class Users {
 		this.role = "ROLE_USER";
 		this.create_Date =  Date.valueOf(LocalDate.now());
 		this.modify_Date =  Date.valueOf(LocalDate.now());
+		status = 1;
 		
 	}
 	public Users(String userName, String passWord, String name, String phone, String email,String role) {
@@ -46,6 +49,7 @@ public class Users {
 		this.role = role;
 		this.create_Date =  Date.valueOf(LocalDate.now());
 		this.modify_Date =  Date.valueOf(LocalDate.now());
+		status = 1;
 	}
 	
 	
@@ -61,6 +65,7 @@ public class Users {
 		this.role = role;
 		this.create_Date = create_Date;
 		this.modify_Date = modify_Date;
+		status = 1;
 	}
 	public Date getCreate_Date() {
 		return create_Date;
@@ -122,7 +127,19 @@ public class Users {
 	public void setRole(String role) {
 		this.role = role;
 	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
 	
-	
+	public String getDisplay() {
+		if(status == 1) {
+			return "Không Khóa";
+		}else {
+			return "Đã Khóa";
+		}
+	}
 
 }

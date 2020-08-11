@@ -19,7 +19,7 @@ public class UsersDaoImpl extends RootDao implements UsersDao{
 		// TODO Auto-generated method stub
 		Connection connection = null;
 		PreparedStatement statement = null;
-		String sql = "select * from users where users_Username = ? and users_Password = ?";
+		String sql = "select * from users where users_Username = ? and users_Password = ?  and users.status = 1";
 		
 		try {
 			connection = getConnection();
@@ -38,6 +38,7 @@ public class UsersDaoImpl extends RootDao implements UsersDao{
 				users.setRole(rs.getString("role"));
 				users.setCreate_Date(rs.getDate("create_date"));
 				users.setModify_Date(rs.getDate("modify_date"));
+				users.setStatus(rs.getInt("status"));
 				return users;
 			}
 		} catch (SQLException e) {
@@ -89,6 +90,7 @@ public class UsersDaoImpl extends RootDao implements UsersDao{
 				users.setUserName(rs.getString("users_Username"));
 				users.setPhone(rs.getString("users_Phone"));
 				users.setRole(rs.getString("role"));
+				users.setStatus(rs.getInt("status"));
 				return users;
 			}
 		} catch (SQLException e) {
@@ -138,6 +140,7 @@ public class UsersDaoImpl extends RootDao implements UsersDao{
 				users.setRole(rs.getString("role"));
 				users.setCreate_Date(rs.getDate("create_date"));
 				users.setModify_Date(rs.getDate("modify_date"));
+				users.setStatus(rs.getInt("status"));
 				listUser.add(users);
 				
 			}
@@ -177,7 +180,7 @@ public class UsersDaoImpl extends RootDao implements UsersDao{
 	public boolean updateUser(Users users) {
 		PreparedStatement statement = null;
 		Connection connection = null;
-		String sql = "update users set  users_Password = ?,users_Name = ?,users_Phone= ?,users_Email = ? ,role = ? ,modify_date = ? where users_id = ?";
+		String sql = "update users set  users_Password = ?,users_Name = ?,users_Phone= ?,users_Email = ? ,role = ? ,modify_date = ? ,status = ? where users_id = ?";
 	try {
 		connection = getConnection();
 		statement = connection.prepareStatement(sql);
@@ -188,7 +191,8 @@ public class UsersDaoImpl extends RootDao implements UsersDao{
 		statement.setString(4, users.getEmail());
 		statement.setString(5, users.getRole());
 		statement.setDate(6, users.getModify_Date());
-		statement.setInt(7, users.getId());
+		statement.setInt(7, users.getStatus());
+		statement.setInt(8, users.getId());
 		statement.executeUpdate();
 		return true;
 	} catch (SQLException e) {
@@ -218,7 +222,7 @@ public class UsersDaoImpl extends RootDao implements UsersDao{
 
 	@Override
 	public boolean addUser(Users users) {
-		String sql = "INSERT INTO users (users_Username,users_Password,users_Name,users_Phone,users_Email,role,create_date,modify_date) VALUES(?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO users (users_Username,users_Password,users_Name,users_Phone,users_Email,role,create_date,modify_date,status) VALUES(?,?,?,?,?,?,?,?,?)";
 		PreparedStatement statement = null;
 		Connection connection = null;
 		try {
@@ -232,6 +236,7 @@ public class UsersDaoImpl extends RootDao implements UsersDao{
 			statement.setString(6,users.getRole());
 			statement.setDate(7,users.getCreate_Date());
 			statement.setDate(8,users.getModify_Date());
+			statement.setInt(9, users.getStatus());
 			statement.executeUpdate();			
 			return true;
 		} catch (SQLException e) {
@@ -282,6 +287,7 @@ public class UsersDaoImpl extends RootDao implements UsersDao{
 				users.setUserName(rs.getString("users_Username"));
 				users.setPhone(rs.getString("users_Phone"));
 				users.setRole(rs.getString("role"));
+				users.setStatus(rs.getInt("status"));
 				return users;
 			}
 		} catch (SQLException e) {
@@ -333,6 +339,7 @@ public class UsersDaoImpl extends RootDao implements UsersDao{
 				users.setUserName(rs.getString("users_Username"));
 				users.setPhone(rs.getString("users_Phone"));
 				users.setRole(rs.getString("role"));
+				users.setStatus(rs.getInt("status"));
 				return users;
 			}
 		} catch (SQLException e) {
@@ -396,6 +403,7 @@ public class UsersDaoImpl extends RootDao implements UsersDao{
 				users.setRole(rs.getString("role"));
 				users.setCreate_Date(rs.getDate("create_date"));
 				users.setModify_Date(rs.getDate("modify_date"));
+				users.setStatus(rs.getInt("status"));
 				listUser.add(users);				
 			}
 			return listUser;
@@ -423,5 +431,130 @@ public class UsersDaoImpl extends RootDao implements UsersDao{
 		
 		return null;
 	}
+
+	@Override
+	public List<Users> getAllUsersBySearch(String name,String role) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		StringBuilder builder = new StringBuilder("select * from users where 1 = 1 ");
+		
+		
+		
+		try {
+			connection = getConnection();
+			
+			 if(!name.isEmpty()) {
+				 builder.append("and users.users_Username like '%"+name+"%' ");
+			 }
+			 if(!role.isEmpty()) {
+				 builder.append("and role = '"+role+"' ");
+			 }
+			 builder.append(" order by users_id desc");
+			 statement = connection.prepareStatement(builder.toString());
+			ResultSet rs = statement.executeQuery();
+			List<Users> listUser = new ArrayList<Users>();
+			while(rs.next()) {
+				Users users = new Users();
+				users.setId(rs.getInt("users_id"));
+				users.setName(rs.getString("users_Name"));
+				users.setEmail(rs.getString("users_Email"));
+				users.setPassWord(rs.getString("users_Password"));
+				users.setUserName(rs.getString("users_Username"));
+				users.setPhone(rs.getString("users_Phone"));
+				users.setRole(rs.getString("role"));
+				users.setCreate_Date(rs.getDate("create_date"));
+				users.setModify_Date(rs.getDate("modify_date"));
+				users.setStatus(rs.getInt("status"));
+				listUser.add(users);
+				
+			}
+			return listUser;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return null;
+	}
+
+	@Override
+	public List<Users> getAllUsersBySearchPagi(String name,String role, int start, int end) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		StringBuilder builder = new StringBuilder("select * from users where 1 = 1 ");
+		
+		
+		try {
+			connection = getConnection();
+			if(!name.isEmpty()) {
+				 builder.append("and users.users_Username like '%"+name+"%' ");
+			 }
+			 if(!role.isEmpty()) {
+				 builder.append("and role = '"+role+"' ");
+			 }
+			 builder.append(" order by users_id desc limit ? ,?");
+			 statement = connection.prepareStatement(builder.toString());
+			 statement.setInt(1, start);
+			 statement.setInt(2, end);
+			ResultSet rs = statement.executeQuery();
+			List<Users> listUser = new ArrayList<Users>();
+			while(rs.next()) {
+				Users users = new Users();
+				users.setId(rs.getInt("users_id"));
+				users.setName(rs.getString("users_Name"));
+				users.setEmail(rs.getString("users_Email"));
+				users.setPassWord(rs.getString("users_Password"));
+				users.setUserName(rs.getString("users_Username"));
+				users.setPhone(rs.getString("users_Phone"));
+				users.setRole(rs.getString("role"));
+				users.setCreate_Date(rs.getDate("create_date"));
+				users.setModify_Date(rs.getDate("modify_date"));
+				users.setStatus(rs.getInt("status"));
+				listUser.add(users);
+				
+			}
+			return listUser;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 
 }

@@ -35,7 +35,7 @@
 					<a class="list-group-item"
 						href='<c:url value="/user/edituser"></c:url>'>Thông tin tài
 						khoản</a> <a class="list-group-item"
-						href='<c:url value="/user/address"></c:url>'>Quản lý đơn hàng</a>
+						href='<c:url value="/user/order"></c:url>'>Quản lý đơn hàng</a>
 					<a class="list-group-item"
 						href='<c:url value="/user/address"></c:url>'>Sổ địa chỉ</a> <a
 						class="list-group-item active"

@@ -41,6 +41,12 @@ public class AuthorServiceImpl implements AuthorService {
 		// TODO Auto-generated method stub
 		return authorDao.addAuthors(authors);
 	}
+
+	@Override
+	public List<Authors> getAllAuthorsPagi(int start, int end) {
+		// TODO Auto-generated method stub
+		return authorDao.getAllAuthorsPagi(start, end);
+	}
 	
  
 }

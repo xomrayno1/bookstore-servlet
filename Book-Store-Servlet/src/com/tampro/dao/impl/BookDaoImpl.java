@@ -79,7 +79,7 @@ public class BookDaoImpl extends RootDao implements BookDao{
 	public List<Books> getAllBook() {
 		Connection connection = null;
 		PreparedStatement statement = null;
-		String sql  = "select * from books ";
+		String sql  = "select * from books  where status = 1";
 		try {
 			connection = getConnection();
 			 statement = connection.prepareStatement(sql);
@@ -133,7 +133,7 @@ public class BookDaoImpl extends RootDao implements BookDao{
 		// TODO Auto-generated method stub
 		Connection connection = null;
 		PreparedStatement statement = null;
-		String sql  = "select * from books where book_Category_Code = ?";
+		String sql  = "select * from books where status = 1 and book_Category_Code = ?";
 		try {
 			connection = getConnection();
 			statement = connection.prepareStatement(sql);
@@ -244,7 +244,7 @@ public class BookDaoImpl extends RootDao implements BookDao{
 	public List<Books> getAllBooksNews() {
 		Connection connection = null;
 		PreparedStatement statement = null;
-		String sql  = "SELECT * FROM `book-store`.books order by  createdate desc limit 12";
+		String sql  = "SELECT * FROM `book-store`.books where status = 1 order by  createdate desc limit 12";
 		try {
 			connection = getConnection();
 			statement = connection.prepareStatement(sql);
@@ -266,6 +266,7 @@ public class BookDaoImpl extends RootDao implements BookDao{
 				books.setPublication_date(rs.getDate("publication_Date"));
 				books.setPrice(rs.getInt("price"));
 				books.setCreate_Date(rs.getDate("createdate"));
+				books.setStatus(rs.getInt("status"));
 				list.add(books);
 			}
 			return list;
@@ -301,7 +302,7 @@ public class BookDaoImpl extends RootDao implements BookDao{
 	public List<Books> getAllBookByIdCategoryPagination(int idCategory,int start, int end) {
 		Connection connection = null;
 		PreparedStatement statement = null;
-		String sql = "SELECT * FROM `book-store`.books where book_Category_Code = ?   limit ?,? ";
+		String sql = "SELECT * FROM `book-store`.books where  status = 1 and book_Category_Code = ?   limit ?,? ";
 		try {
 			connection = getConnection();
 			statement = connection.prepareStatement(sql);
@@ -325,6 +326,7 @@ public class BookDaoImpl extends RootDao implements BookDao{
 				books.setPublication_date(rs.getDate("publication_Date"));
 				books.setPrice(rs.getInt("price"));
 				books.setCreate_Date(rs.getDate("createdate"));
+				books.setStatus(rs.getInt("status"));
 				list.add(books);
 			}
 			return list;
@@ -356,7 +358,7 @@ public class BookDaoImpl extends RootDao implements BookDao{
 
 	@Override
 	public List<Books> getAllBookBySearch(String name) {
-		String sql = "select * from books where books.book_Title like ? ";
+		String sql = "select * from books where status  and  books.book_Title like ? ";
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
@@ -380,6 +382,7 @@ public class BookDaoImpl extends RootDao implements BookDao{
 				books.setPublication_date(rs.getDate("publication_Date"));
 				books.setPrice(rs.getInt("price"));
 				books.setCreate_Date(rs.getDate("createdate"));
+				books.setStatus(rs.getInt("status"));
 				list.add(books);
 			}
 			return list;
@@ -412,7 +415,7 @@ public class BookDaoImpl extends RootDao implements BookDao{
 	@Override
 	public List<Books> getAllBookBySearchPagination(String name, int start, int end) {
 		
-		String sql = "select * from books where books.book_Title like  '%'?'%' limit ?,? ";
+		String sql = "select * from books where status = 1 and  books.book_Title like  '%'?'%' limit ?,? ";
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
@@ -437,6 +440,7 @@ public class BookDaoImpl extends RootDao implements BookDao{
 				books.setPublication_date(rs.getDate("publication_Date"));
 				books.setPrice(rs.getInt("price"));
 				books.setCreate_Date(rs.getDate("createdate"));
+				books.setStatus(rs.getInt("status"));
 				list.add(books);
 			}
 			return list;
@@ -467,7 +471,7 @@ public class BookDaoImpl extends RootDao implements BookDao{
 
 	@Override
 	public List<Books> getAllBook(int start, int end) {
-		String sql ="SELECT * FROM books order by books.book_ID DESC limit ?,?";
+		String sql ="SELECT * FROM books where status = 1 order by status,books.book_ID DESC limit ?,?";
 		Connection connection = null;
 		PreparedStatement statement = null;
 		
@@ -492,6 +496,7 @@ public class BookDaoImpl extends RootDao implements BookDao{
 				books.setPublication_date(rs.getDate("publication_Date"));
 				books.setPrice(rs.getInt("price"));
 				books.setCreate_Date(rs.getDate("createdate"));
+				books.setStatus(rs.getInt("status"));
 				list.add(books);
 			}
 			return list;
@@ -521,20 +526,137 @@ public class BookDaoImpl extends RootDao implements BookDao{
 	}
 
 	@Override
-	public List<Books> getAllBookSearch(String name, String category, String dateTo, String dateFrom) {
-		String sqlQ =" select * from books where  `createdate` between '2020-07-05' and '2020-07-13' AND  `book_Category_Code`= 6    and  books.book_Title like  '%d%' ";
-		StringBuilder builder = new StringBuilder("select * from books where ");
-		if(dateTo != null || dateFrom != null ) {
-			builder.append("`createdate` between "+dateTo+" and "+dateFrom);
+	public List<Books> getAllBookAdminSearchPagi(String name, int category, String dateTo, String dateFrom,int start, int end) {
+		
+		StringBuilder builder = new StringBuilder("select * from books where  1 = 1");
+		if(!dateTo.isEmpty()  && !dateFrom.isEmpty()) {
+			builder.append(" AND createdate between '"+dateTo+"' AND '"+dateFrom+"' ");
 		}
-		if(category != null) {
-			builder.append(" AND  `book_Category_Code`= 6  and ");
+		if(category > 0) {
+			builder.append(" AND  `book_Category_Code`= "+category+" ");
 		} 
-		if(name != null) {
-			builder.append("  and  books.book_Title like  '%'?'%' "); 
-		} 
+		if(!name.isEmpty()) {
+			builder.append(" AND  books.book_Title like  '%"+name+"%' "); 
+		}
+		builder.append(" order by status,book_ID desc  limit ?, ?");
+		Connection connection = null;
+		PreparedStatement statement = null;
+		
+		try {
+			connection = getConnection();
+			statement = connection.prepareStatement(builder.toString());					
+			statement.setInt(1, start);
+			statement.setInt(2, end);
+			ResultSet rs = statement.executeQuery();
+			List<Books> list = new ArrayList<Books>();
+			while(rs.next()) {
+				int idAuthor = rs.getInt("author_ID");
+				Authors authors = authorService.getAuthorsById(idAuthor);
+				Books books = new Books();
+				books.setId(rs.getInt("book_ID"));
+				books.setISBN(rs.getString("ISBN"));
+				books.setTitle(rs.getString("book_Title"));
+				books.setImages(rs.getString("images"));
+				books.setComments(rs.getString("book_Comments"));
+				books.setAuthor(authors);
+				books.setCategory_Id(rs.getInt("book_Category_Code"));
+				books.setPublication_date(rs.getDate("publication_Date"));
+				books.setPrice(rs.getInt("price"));
+				books.setCreate_Date(rs.getDate("createdate"));
+				books.setStatus(rs.getInt("status"));
+				list.add(books);
+			}
+			return list;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return null;
 		
 		
+	
+	}
+
+	@Override
+	public List<Books> getAllBookAdminSearch(String name, int category, String dateTo, String dateFrom) {
+		
+		StringBuilder builder = new StringBuilder("select * from books where  1 = 1");
+		if(!dateTo.isEmpty()  && !dateFrom.isEmpty()) {
+			builder.append(" AND  createdate between '"+dateTo+"' AND '"+dateFrom+"' ");
+		}
+		if(category > 0) {
+			builder.append(" AND  `book_Category_Code`= "+category+" ");
+		} 
+		if(!name.isEmpty()) {
+			builder.append(" AND  books.book_Title like  '%"+name+"%' "); 
+		}
+		builder.append(" order by status,book_ID desc ");
+		Connection connection = null;
+		PreparedStatement statement = null;
+		
+		try {
+			connection = getConnection();
+			statement = connection.prepareStatement(builder.toString());					
+	
+			ResultSet rs = statement.executeQuery();
+			List<Books> list = new ArrayList<Books>();
+			while(rs.next()) {
+				int idAuthor = rs.getInt("author_ID");
+				Authors authors = authorService.getAuthorsById(idAuthor);
+				Books books = new Books();
+				books.setId(rs.getInt("book_ID"));
+				books.setISBN(rs.getString("ISBN"));
+				books.setTitle(rs.getString("book_Title"));
+				books.setImages(rs.getString("images"));
+				books.setComments(rs.getString("book_Comments"));
+				books.setAuthor(authors);
+				books.setCategory_Id(rs.getInt("book_Category_Code"));
+				books.setPublication_date(rs.getDate("publication_Date"));
+				books.setPrice(rs.getInt("price"));
+				books.setCreate_Date(rs.getDate("createdate"));
+				books.setStatus(rs.getInt("status"));
+				list.add(books);
+			}
+			return list;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 		
 		return null;
 	}

@@ -47,4 +47,10 @@ public class CartItemServiceImpl  implements CartItemService{
 		return cartItemDao.getCartItemById(id);
 	}
 
+	@Override
+	public boolean deleteByIdOrder(int id) {
+		// TODO Auto-generated method stub
+		return cartItemDao.deleteByIdOrder(id);
+	}
+
 }

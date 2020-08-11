@@ -23,9 +23,9 @@ public class OrdersServiceImpl  implements OrdersService{
 	}
 
 	@Override
-	public boolean delete(Orders orders) {
+	public boolean delete(int  id) {
 		// TODO Auto-generated method stub
-		return orderDao.delete(orders);
+		return orderDao.delete(id);
 	}
 
 	@Override
@@ -50,6 +50,36 @@ public class OrdersServiceImpl  implements OrdersService{
 	public List<Orders> getAllOrder(int start, int end) {
 		// TODO Auto-generated method stub
 		return orderDao.getAllOrder(start, end);
+	}
+
+	@Override
+	public List<Orders> getAllOrderByIdUser(int idUser) {
+		// TODO Auto-generated method stub
+		return orderDao.getAllOrderByIdUser(idUser);
+	}
+
+	@Override
+	public List<Orders> getAllOrderByIdUser(int idUser, int start, int end) {
+		// TODO Auto-generated method stub
+		return orderDao.getAllOrderByIdUser(idUser, start, end);
+	}
+
+	@Override
+	public List<Orders> getAllOrderByStatus(int status) {
+		// TODO Auto-generated method stub
+		return orderDao.getAllOrderByStatus(status);
+	}
+
+	@Override
+	public List<Orders> getAllOrderByStatusPagi(int status, int start, int end) {
+		// TODO Auto-generated method stub
+		return orderDao.getAllOrderByStatusPagi(status, start, end);
+	}
+
+	@Override
+	public boolean checkOrderIdAddress(int idAddress) {
+		// TODO Auto-generated method stub
+		return orderDao.checkOrderIdAddress(idAddress);
 	}
 	
 

@@ -34,26 +34,7 @@ public class ProductDetailServlet extends HttpServlet {
 		int id = Integer.parseInt(req.getParameter("id"));
 		Books book = bookService.getBookById(id);
 		req.setAttribute("book", book);
-		Integer  idBook = book.getId();
-		
-		boolean check = true;
-		Cookie[] cookies = req.getCookies();
-		for(Cookie item : cookies) {
-			if(item.getValue().equals(idBook.toString())) {
-				check = false;
-			}
-		}		
-		if(check) {
-			Cookie cookiee = null;
-			if(cookies.length == 5) {
-				cookiee  =  new Cookie(cookies[1].getName(),idBook.toString());
-			}else{
-				Integer length = cookies.length + 1;
-				String idCookie = length.toString();
-				cookiee = new Cookie(idCookie,idBook.toString());				
-			}
-			resp.addCookie(cookiee);	
-		}
+
 		Category category = cateogoryService.getCategoryById(book.getCategory_Id());
 		
 		req.setAttribute("category", category);

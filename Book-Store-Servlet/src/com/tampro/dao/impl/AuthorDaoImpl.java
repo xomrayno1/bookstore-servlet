@@ -14,7 +14,7 @@ import com.tampro.model.Authors;
 public class AuthorDaoImpl extends RootDao implements AuthorDao{
 
 	@Override
-	public Authors getAuthorsById(int id) {
+	public Authors getAuthorsById(int id)   {
 		PreparedStatement statement = null;
 		Connection connection = null;
 		String sql = " select * from authors where author_ID = ?";
@@ -63,7 +63,7 @@ public class AuthorDaoImpl extends RootDao implements AuthorDao{
 	public List<Authors> getAllAuthors() {
 		PreparedStatement statement = null;
 		Connection connection = null;
-		String sql = " select * from authors ";
+		String sql = " select * from authors   order by author_ID desc";
 		
 		try {
 			connection = RootDao.getConnection();
@@ -123,6 +123,55 @@ public class AuthorDaoImpl extends RootDao implements AuthorDao{
 	public boolean addAuthors(Authors authors) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public List<Authors> getAllAuthorsPagi(int start, int end) {
+		PreparedStatement statement = null;
+		Connection connection = null;
+		String sql = " select * from authors   order by author_ID desc limit ? , ?";
+		
+		try {
+			connection = RootDao.getConnection();
+			 statement =  connection.prepareStatement(sql);
+			statement.setInt(1, start);
+			statement.setInt(2, end);
+			statement.executeQuery();
+			ResultSet resultSet = statement.getResultSet();
+			List<Authors> list = new ArrayList<Authors>();
+			while(resultSet.next()) {
+				Authors authors = new Authors();
+				authors.setId(resultSet.getInt("author_ID"));
+				authors.setFirst_Name(resultSet.getString("author_First_Name"));
+				authors.setLast_Name(resultSet.getString("author_Last_Name"));
+				authors.setInitials(resultSet.getString("author_Initials"));
+				list.add(authors);
+			}
+			return list;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		
+		return null;
 	}
 
 }

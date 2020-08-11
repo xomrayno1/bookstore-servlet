@@ -34,7 +34,7 @@
 					<a class="list-group-item "
 						href='<c:url value="/user/edituser"></c:url>'>Thông tin tài
 						khoản</a> <a class="list-group-item"
-						href='<c:url value="/user/address"></c:url>'>Quản lý đơn hàng</a>
+						href='<c:url value="/user/order"></c:url>'>Quản lý đơn hàng</a>
 					<a class="list-group-item active"
 						href='<c:url value="/user/address"></c:url>'>Sổ địa chỉ</a> <a
 						class="list-group-item"
@@ -70,8 +70,8 @@
 											<a href='<c:url value="/user/address/edit?id=${item.id}"></c:url>'>Chỉnh Sửa</a>
 											<c:if test="${item.status == 0}">
 												<p>
-													<a href='<c:url value="/user/address/remove?id=${item.id}"></c:url>'>
-													<button class="btn btn-delete" >Xóa</button></a>
+													<input type="hidden" id="idAddress" value="${item.id}">
+													<button class="btn btn-delete"  data-toggle="modal" data-target="#modal_remove">Xóa</button>
 												</p>
 											</c:if>
 										</div>
@@ -80,10 +80,38 @@
 								</div>
 							</div>
 						</c:forEach>
+						<c:if test="${error != null}">
+							<div class="alert alert-danger"> 
+								${error}
+							</div>
+						</c:if>
 
 
 					</div>
 					<div class="col-sm-1"></div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="modal_remove">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<p class="modal-title">Xóa</p>
+						<button class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						Bạn có chắc chắn muốn xóa không ?
+					</div>
+					<div class="modal-footer">
+						<form action='<c:url value="/user/address/remove" ></c:url>' method="get" id="form-remove">
+							<input  name="id" id="id" type="hidden">
+					
+						
+						</form>
+						<button class="btn btn-primary" type="submit"  form="form-remove">Có</button>
+						<button class="btn" data-dismiss="modal">Không</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -99,8 +127,17 @@
 
 <script type="text/javascript">
 
-
+	var url = "/user/address/remove?id=${item.id}";
+	var btnDelete = document.getElementsByClassName('btn-delete');
+	for(var i = 0 ; i < btnDelete.length ; i++){
+		btnDelete[i].addEventListener('click',function(){
+			var idAddress = $(this).parent().find('#idAddress').val();
+			$('#id').val(idAddress);
+			
+		});
+	}
 	
+
 
 
 </script>

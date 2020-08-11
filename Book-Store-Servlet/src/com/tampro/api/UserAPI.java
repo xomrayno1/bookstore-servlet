@@ -15,7 +15,7 @@ import com.tampro.service.UserService;
 import com.tampro.service.impl.UserServiceImpl;
 
 
-@WebServlet("/user-api")
+@WebServlet("/admin/user/api")
 public class UserAPI extends HttpServlet{
 
 	UserService userService = new UserServiceImpl();
@@ -25,7 +25,8 @@ public class UserAPI extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-		Users user = userService.getUserById(1);
+		int id = Integer.parseInt(req.getParameter("id"));
+		Users user = userService.getUserById(id);
 		Gson gson = new Gson();
 		PrintWriter writer = resp.getWriter();
 		writer.print(gson.toJson(user));

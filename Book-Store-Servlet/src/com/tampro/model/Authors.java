@@ -5,16 +5,18 @@ public class Authors {
 	private String first_Name;
 	private String initials;
 	private  String last_Name;
+	private int status;
 	
 	
 	public Authors() {
 		
 	}
 	
-	public Authors(String first_Name, String initials, String last_Name) {
+	public Authors(String first_Name, String initials, String last_Name,int status) {
 		this.first_Name = first_Name;
 		this.initials = initials;
 		this.last_Name = last_Name;
+		this.status = status;
 	}
 
 
@@ -58,6 +60,14 @@ public class Authors {
 	}
 	public String getFullName() {
 		return this.first_Name + last_Name;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 	 
 	

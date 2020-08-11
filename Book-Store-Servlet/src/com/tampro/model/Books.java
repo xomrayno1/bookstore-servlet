@@ -14,15 +14,16 @@ public class Books {
 	private int price;
 	private Authors author;
 	private int category_Id;
+	private int status;  //1 còn dùng , hêt dung`;
 	
 	
 	
      public Books() {
     	 this.create_Date = Date.valueOf(LocalDate.now());
-		
+		status = 1;
 	}
 	
-	public Books(String iSBN, String title, Date publication_date, String comments,String images, int price,Authors author, int category_Id) {
+	public Books(String iSBN, String title, Date publication_date, String comments,String images, int price,Authors author, int category_Id, int status) {
 		
 		ISBN = iSBN;
 		this.title = title;
@@ -33,6 +34,7 @@ public class Books {
 		this.author = author;
 		this.category_Id = category_Id;
 		this.create_Date = Date.valueOf(LocalDate.now());
+		this.status = status;
 	}
 	public int getId() {
 		return id;
@@ -100,7 +102,22 @@ public class Books {
 	public void setCreate_Date(Date create_Date) {
 		this.create_Date = create_Date;
 	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
 	
+	
+	public String getDisplay() {
+		if(this.status == 1) {
+			return "Không hỗ trợ";
+		}
+		return "Còn hỗ trợ";
+	}
 	
 
 }

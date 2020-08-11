@@ -10,7 +10,7 @@
 <script type="text/script" src='<c:url value="/js/bootstrap.min.js"></c:url>'></script>
 <script type="text/script" src='<c:url value="/js/jquery.min.js"></c:url>'></script>
 <link rel="stylesheet" href='<c:url value="/css/bootstrap.min.css"></c:url>'>
-<link rel="stylesheet" href='<c:url value="/fonts/glyphicons-halflings-regular.eot"></c:url>'>
+
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script
@@ -31,32 +31,34 @@
 					<a class="list-group-item" href='<c:url value="/admin/home"></c:url>'>Trang Chủ</a>
 					<a class="list-group-item"  href='<c:url value="/admin/account"></c:url>'>Quản lý tài khoản</a>
 					<a class="list-group-item"  href='<c:url value="/admin/book"></c:url>'>Quản lý sách</a>
+					<a class="list-group-item"  href='<c:url value="/admin/author"></c:url>'>Quản lý tác giả</a>
 					<a class="list-group-item "  href='<c:url value="/admin/category"></c:url>'>Quản lý danh mục</a>
-					<a class="list-group-item"  href='<c:url value="#"></c:url>'>Quản lý tác giả</a>
-					<a class="list-group-item active"  href='<c:url value="#"></c:url>'>Quản lý đơn hàng</a>
+					<!-- <a class="list-group-item"  href='<c:url value="#"></c:url>'>Quản lý tác giả</a> -->
+					<a class="list-group-item active"  href='<c:url value="/admin/order"></c:url>'>Quản lý đơn hàng</a>
 					<a class="list-group-item"  href='<c:url value="/admin/news"></c:url>'>Quản lý tin tức</a>
 					<a class="list-group-item"  href='<c:url value="/admin/contact"></c:url>'>Quản lý liên hệ</a>
-					<a class="list-group-item"  href='<c:url value="#"></c:url>'>Quản lý mã coupon</a>
+					<!-- <a class="list-group-item"  href='<c:url value="#"></c:url>'>Quản lý mã coupon</a> -->
 					<a class="list-group-item"  href='<c:url value="/logout"></c:url>'>Thoát</a>
 				</div>
 			</div>
 			<div class="col-sm-10">
 					<table class="table table-bordered table-hover text-center">
 					<tr>
-						<td colspan="3"> 
-							<input class="form-control" type="text"  placeholder="Tìm kiếm tài khoản đơn hàng"> 							
-						</td >
+					
 						<td colspan="2">
-							<select name="status" class="form-control">
+							<form action='<c:url  value="/admin/order/search"></c:url>' method="get" id="formSearch">
+							<select name="status" class="form-control" >
 								<option value="0">--Chọn Tình Trạng--</option>
-								<option value="1">Thành Công</option>
-								<option value="2">Đang Xử Lý</option>
-								<option value="3">Hủy Đơn Hàng</option>
+								<option value="2">Thành Công</option>
+								<option value="3">Đang Xử Lý</option>
+								<option value="1">Hủy Đơn Hàng</option>
 							</select>
+							</form>
 						</td>	
 						<td colspan="2">
-							<button class="btn">Tìm Kiếm</button>
-						</td>						
+							<button class="btn" form="formSearch">Tìm Kiếm</button>
+						</td>
+										
 					</tr>
 					<tr style="text-align: center;">
 						<th width="10%">STT</th>
@@ -113,11 +115,7 @@
 							</ul>
 						</td>
 					</tr>
-					<tr>
-						<td colspan="7">
-						<button data-toggle="modal" data-target="#mymodal" class="btn btn-primary">Thêm</button>
-						</td>
-					</tr>
+
 				</table>
 			</div>			
 		</div>
@@ -160,9 +158,12 @@
 				<div class="row">
 				<div class="col-sm-2"></div>
 					<div class="col-sm-8">
+						
+						<ul class="list-group" id="user_update">
+							
+						</ul>
 						<form	action='<c:url value="/admin/order/update"></c:url>' method="POST" id="form-status">
-							<select class="form-control select_status" name="status"  >
-								<option value="0">Tình Trạng Đơn Hàng</option>
+							<select class="form-control select_status" name="status" id="select_status" >						
 								<option value="3">Đang Xử Lý</option>
 								<option value="2">Thành Công</option>
 								<option value="1">Hủy Đơn Hàng</option>
@@ -229,18 +230,34 @@
 				   		tableAddress.innerHTML = straddress;
 				    }
 				  };
-				  xhttp.open("GET", "http://localhost:8080/Book-Store-Servlet/admin/api/address?address="+idAddress.val()+"&&user="+idUser.val(), true);
+				  xhttp.open("GET", "http://localhost:8080/Book-Store-Servlet/admin/api/address?action=get&&address="+idAddress.val()+"&&user="+idUser.val(), true);
 				  xhttp.send();			   						
 		});		
 		
 		
 		btnUpdate[i].addEventListener('click',function(){
-			var id = $(this).parent().find('#idOrder').val();
-			//var id = document.getElementById('idOrder');
+			var id = $(this).parent().find('#idOrder').val();		
 			$("#idOd").val(id);
+			var xhttp = new XMLHttpRequest();
+			  xhttp.onreadystatechange = function() {
+			    if (this.readyState == 4 && this.status == 200) {
+			     var arr = JSON.parse(this.responseText);			   
+			   	 var select_Status = document.getElementById('select_status');
+			   	select_Status.value = arr.status;
+			   	 var user_update = document.getElementById('user_update');
+			   	 var str = "<li class='list-group-item'> Tài khoản đặt hàng  : "+arr.users.userName+"</li><li class='list-group-item'>Mã đơn hàng :"+ arr.id +"</li>";
+			   	 	str += "<li class='list-group-item'> Ngày Tạo : "+arr.date+"</li>"
+			   	user_update.innerHTML = str ;
+			  
+			    }
+			  };
+			  xhttp.open("GET", "http://localhost:8080/Book-Store-Servlet/admin/order/api?id="+id, true);
+			  xhttp.send();	
 		});
 	}
-
+	
+	
+	
 
 </script>
 

@@ -104,5 +104,22 @@ public class FormatUtils {
 		      System.out.println("Match not found");
 		    }
 		  }
+	public static String getDisplayStatus(int status) {
+		
+		switch (status) {
+		case 3:
+			return "Đang Xử Lý";
+			
+		case 2:
+			return "Thành Công";
+			
+		case 1:
+			return "Hủy Đơn Hàng";
+			
+		default:
+			return "";
+		}
+
+	}
 
 }

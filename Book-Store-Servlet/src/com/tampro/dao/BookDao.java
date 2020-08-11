@@ -19,5 +19,6 @@ public interface BookDao {
 	List<Books> getAllBookBySearchPagination(String name,int start, int end);
 	List<Books> getAllBook(int start , int end);
 	
-	List<Books> getAllBookSearch(String name,String category, String dateTo,String dateFrom);
+	List<Books> getAllBookAdminSearchPagi(String name,int category, String dateTo,String dateFrom ,int start, int end);
+	List<Books> getAllBookAdminSearch(String name,int category, String dateTo,String dateFrom );
 }

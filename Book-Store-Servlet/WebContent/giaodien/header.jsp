@@ -56,7 +56,7 @@
 					<li class="dropdown"><a href='<c:url value="#"></c:url>'><span
 							class="glyphicon glyphicon-user"> Tài khoản</span></a>
 						<ul class="dropdown-menu info">
-							<li><a href="#">Đơn hàng của tôi</a></li>
+							<li><a href='<c:url value="/user/order"></c:url>'>Đơn hàng của tôi</a></li>
 							<li><a href='<c:url value="/user/edituser"></c:url>'>Tài
 									khoản của tôi</a></li>
 							<li><a href='<c:url value="/logout"></c:url>'>Thoát tài

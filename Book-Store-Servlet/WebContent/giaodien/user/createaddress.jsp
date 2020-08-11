@@ -32,7 +32,7 @@
 			<div class="col-sm-4">
 				<div class="list-group">		
 					<a class="list-group-item" href='<c:url value="/user/edituser"></c:url>'>Thông tin tài khoản</a>
-					<a class="list-group-item" href='<c:url value="/user/address"></c:url>'>Quản lý đơn hàng</a>
+					<a class="list-group-item" href='<c:url value="/user/order"></c:url>'>Quản lý đơn hàng</a>
 					<a class="list-group-item active"  href='<c:url value="/user/address"></c:url>'>Sổ địa chỉ</a>
 					<a class="list-group-item"  href='<c:url value="/user/wishlist"></c:url>'>Sản phẩm yêu thích</a>
 				</div>

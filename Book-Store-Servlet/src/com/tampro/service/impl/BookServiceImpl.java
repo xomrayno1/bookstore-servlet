@@ -83,5 +83,18 @@ public class BookServiceImpl  implements BookService{
 		return bookDao.getAllBook(start, end);
 	}
 
+	@Override
+	public List<Books> getAllBookAdminSearchPagi(String name, int category, String dateTo, String dateFrom, int start,
+			int end) {
+		// TODO Auto-generated method stub
+		return bookDao.getAllBookAdminSearchPagi(name, category, dateTo, dateFrom, start, end);
+	}
+
+	@Override
+	public List<Books> getAllBookAdminSearch(String name, int category, String dateTo, String dateFrom) {
+		// TODO Auto-generated method stub
+		return bookDao.getAllBookAdminSearch(name, category, dateTo, dateFrom);
+	}
+
 
 }

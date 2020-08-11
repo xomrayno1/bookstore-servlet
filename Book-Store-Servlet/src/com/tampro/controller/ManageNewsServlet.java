@@ -20,7 +20,7 @@ public class ManageNewsServlet  extends HttpServlet{
 	
 	NewsService newService = new NewsServiceImpl();
 	
-	private static final int LIMIT = 6;
+	private static final int LIMIT = 5;
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub

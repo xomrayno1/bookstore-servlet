@@ -7,7 +7,7 @@
 <html>
 <head>
 
-<title>Tìm Kiếm Admin Book</title>
+<title>Admin</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link href='<c:url value="/css/style.css"></c:url>' rel="stylesheet">
 <link href='<c:url value="/css/bootstrap.min.css"></c:url>'
@@ -21,7 +21,7 @@
 	
 </script>
 
-    <link rel="stylesheet" href="fonts/glyphicons-halflings-regular.eot"  >
+    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -40,27 +40,34 @@
 					<a class="list-group-item " href='<c:url value="/admin/home"></c:url>'>Trang Chủ</a>
 					<a class="list-group-item " href='<c:url value="/admin/account"></c:url>'>Quản lý tài khoản</a>
 					<a class="list-group-item active"  href='<c:url value="/admin/book"></c:url>'>Quản lý sách</a>
+					<a class="list-group-item"  href='<c:url value="/admin/author"></c:url>'>Quản lý tác giả</a>
 					<a class="list-group-item"  href='<c:url value="/admin/category"></c:url>'>Quản lý danh mục</a>
-					<a class="list-group-item"  href='<c:url value="#"></c:url>'>Quản lý tác giả</a>
+					<!-- <a class="list-group-item"  href='<c:url value="#"></c:url>'>Quản lý tác giả</a> -->
 					<a class="list-group-item"  href='<c:url value="/admin/order"></c:url>'>Quản lý đơn hàng</a>
 					<a class="list-group-item"  href='<c:url value="/admin/news"></c:url>'>Quản lý tin tức</a>
 					<a class="list-group-item"  href='<c:url value="/admin/contact"></c:url>'>Quản lý liên hệ</a>
-					<a class="list-group-item"  href='<c:url value="#"></c:url>'>Quản lý mã coupon</a>
+					<!-- <a class="list-group-item"  href='<c:url value="#"></c:url>'>Quản lý mã coupon</a> -->
 					<a class="list-group-item"  href='<c:url value="/logout"></c:url>'>Thoát</a>
 				</div>
 			</div>
 			<!-- '<c:url value="/admin/book/manage?action=search"></c:url>' -->
-			<form id="form-search" method="get" action='<c:url value="/admin/book"></c:url>'>
-			
+			<form id="form-search" method="get" action='<c:url value="/admin/book/search"></c:url>'>
+				
 			</form>
 			<div class="col-sm-10">
 				<table class="table table-bordered table-hover text-center">
 					<tr>
+						<td colspan="9" id="resultSearch"> 
+						
+						</td>
+					</tr>
+					<tr>
+					
 						<td colspan="2"> 
 							<input name="name" id="nameSearch" class="form-control" type="text"  placeholder="Tìm kiếm" form="form-search"> 							
 						</td>
 						<td colspan="1"> 
-							<select class="form-control" name="categoryd" form="form-search" id="categorySearch">
+							<select class="form-control" name="category" form="form-search" id="categorySearch">
 								<option value="0">Chọn Danh Mục</option>
 								<c:forEach items="${listCategory}" var="item">
 									<option value="${item.id}">${item.description}</option>
@@ -74,8 +81,21 @@
 							<input name="dateFrom" class="form-control" type="date" form="form-search" id="dateFrom">						
 						</td>
 						<td>
-							<button class="btn" form="form-search" type="submit">Tìm kiếm</button>
+							<button class="btn "  form="form-search" type="submit">Tìm kiếm</button>
 						</td>
+					
+						<td>
+							<p class="error" id="error_seacrh"></p>
+							
+							<input id="valueSearch" value="${param.name}" type="hidden">
+							<input id="valueCategory" value="${param.category}" type="hidden">
+							<input id="valueDateto" value="${param.dateTo}" type="hidden">
+							<input id="valueDatefrom" value="${param.dateFrom}" type="hidden">
+						</td>
+					
+					
+					
+					
 					
 					</tr>
 															
@@ -118,13 +138,13 @@
 									<c:set value="1"  var="pre" />
 								</c:if>
 
-									<li><a href='<c:url value="/admin/book?page=${pre}"></c:url>'>&laquo;</a>
+									<li><a href='<c:url value="/admin/book/search?name=${param.name}&category=${param.category}&dateTo=${param.dateTo}&dateFrom=${param.dateFrom}&page=${pre}"></c:url>'>&laquo;</a>
 									<c:forEach begin="1" end="${soPage}" var="item">
 										<c:if test="${item != pageCurrent }">
-											<li ><a href="<c:url value="/admin/book?page=${item}"></c:url>">${item}</a></li>
+											<li ><a href="<c:url value="/admin/book/search?name=${param.name}&category=${param.category}&dateTo=${param.dateTo}&dateFrom=${param.dateFrom}&page=${item}"></c:url>">${item}</a></li>
 										</c:if>
 										<c:if test="${item == pageCurrent }">
-											<li class="active" ><a href="<c:url value="/admin/book?page=${item}"></c:url>">${item}</a></li>
+											<li class="active" ><a href="<c:url value="/admin/book/search?name=${param.name}&category=${param.category}&dateTo=${param.dateTo}&dateFrom=${param.dateFrom}&page=${item}"></c:url>">${item}</a></li>
 										</c:if>
 									</c:forEach> 
 									
@@ -132,7 +152,7 @@
 								<c:if test="${next >= soPage}">
 									<c:set value="${soPage}"  var="next" />
 								</c:if>
-								<li><a href='<c:url value="/admin/book?page=${next}"></c:url>'>&raquo;</a>
+								<li><a href='<c:url value="/admin/book/search?name=${param.name}&category=${param.category}&dateTo=${param.dateTo}&dateFrom=${param.dateFrom}&page=${next}"></c:url>'>&raquo;</a>
 									
 								</ul>
 							</td>
@@ -151,24 +171,7 @@
 
 
 	<div class="container">
-		<div class="modal" id="modaldelete">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title">Xóa sản phẩm</h1>
-					<button class="close" data-dismiss="modal" type="button">&times;</button>
-				</div>
-				<div class="modal-body">
-					<p>Bạn Có Chắc chắc chắn muốn xóa sản phẩm ko ?</p>
-				</div>
-				<div class="modal-footer">
-					<button class="btn-primary" type="button">Có</button>
-					<button class="btn-dark" type="button">Không</button>
-				</div>
-			</div>
-		</div>
 
-	</div>
 
 	<div class="modal fade" id="mymodal">
 		<div class="modal-dialog">
@@ -327,22 +330,48 @@
 		alertTitle.innerHTML ="";
 	});
 	
-	var formSearch = document.getElementById('form-search');
-	formSearch.addEventListener('submit',function(evt){
-		var name = document.getElementById('nameSearch');
-		var category = document.getElementById('categorySearch');
-		var dateFrom = document.getElementById('dateFrom');
+	
+		var errorSearch = document.getElementById('error_seacrh');
+	
+		var valueSearch = document.getElementById('valueSearch').value;
+		var valueCategory = document.getElementById('valueCategory').value;
+		var valueDateFrom = document.getElementById('valueDatefrom').value;
+		var valueDateTo = document.getElementById('valueDateto').value;
+	
 		var dateTo = document.getElementById('dateTo');
+		var dateFrom =  document.getElementById('dateFrom');
+		var  nameSearch = document.getElementById('nameSearch');
+		var categorySearch = document.getElementById('categorySearch');
+		nameSearch.value = valueSearch;
+		categorySearch.value = valueCategory ;
 		
-		if(category.value==0){
-			category.removeAttribute("name");
+		dateTo.value = valueDateTo;
+		dateFrom.value = valueDateFrom ;
+		
+	
+		
+	document.getElementById('form-search').addEventListener('submit',function(evt){
+		var dateStart = new Date(dateTo.value);
+		var dateEnd = new Date(dateFrom.value);
+		if(dateStart  >  dateEnd){
+			document.getElementById('error_seacrh').innerHTML = "Ngày bị lỗi";
+			evt.preventDefault();
 		}
-		if(dateFrom.value == "" || dateTo.value == ""){
-			dateFrom.removeAttribute("name");
-			dateTo.removeAttribute("name");
-		}
-			
 	});
+	var resultSearch = document.getElementById('resultSearch');
+	var str = "Kết quả tìm kiếm : "+nameSearch.value;
+
+	if(dateTo.value != "" && dateFrom.value != ""){
+		str += "  "+dateTo.value + " Đến "+ dateFrom.value;
+	}
+	
+	
+	resultSearch.innerHTML = str;
+	
+	
+	
+	
+
 	
 </script>
 

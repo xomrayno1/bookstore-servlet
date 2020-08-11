@@ -19,7 +19,9 @@ public class PathRequest {
 	public static final String SHIPPING = "/user/shipping";
 	public static final String PAYMENT = "/user/payment";
 	public static final String ADD_ORDER = "/user/add-order";
-	
+	public static final String USER_ORDER = "/user/order";
+	public static final String USER_REMOVE_ORDER = "/user/order/remove";
+	public static final String ADMIN_ORDER_SEARCH ="/admin/order/search";
 	public static final String EDIT_USER = "/user/edituser";
 	public static final String ADDRESS_USER = "/user/address";
 	public static final String HISTORY_USER = "/user/history";
@@ -33,10 +35,13 @@ public class PathRequest {
 	public static final String ACCOUNT_ADMIN = "/admin/account";
 	public static final String CATEGORY_ADMIN = "/admin/category";
 	public static final String BOOK_ADMIN = "/admin/book";
+	public static final String ADMIN_BOOK_SEARCH = "/admin/book/search";
 	public static final String CONTACT_ADMIN = "/admin/contact";
 	public static final String NEWS_ADMIN = "/admin/news";
 	public static final String ADMIN_UPDATE_ORDER = "/admin/order/update";
 	public static final String CREATE_BOOK_ADMIN = "/admin/book/create";
+	public static final String ADMIN_AUTHOR = "/admin/author";
+
 	public static final String ORDER_ADMIN = "/admin/order";
 	public static final String FORGOT_PASSWORD = "/forgot-password";
 	public static final String NEWS = "/news";
@@ -44,6 +49,7 @@ public class PathRequest {
 	public static final String MANAGE_BOOK_ACTION = "/admin/book/manage";
 	public static final String MANAGE_CONTACT_ACTION = "/admin/contact/manage";
 	public static final String SEARCH_BOOK_ADMIN = "/admin/book/search";
+	public static final String SEARCH_ACCOUNT_ADMIN = "/admin/account/search";
 	public static final String ADD_CONTACT = "/add-contact";
 	public static final String ADD_NEWS = "/admin/news/create";
 }

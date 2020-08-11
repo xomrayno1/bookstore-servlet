@@ -65,11 +65,7 @@ public class CartItemDaoImpl extends RootDao  implements CartItemDao{
 		return false;
 	}
 
-	@Override
-	public boolean delete(int id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 
 	@Override
 	public List<CartItem> getAllCartItemByIdOrder(int id) {
@@ -170,6 +166,53 @@ public class CartItemDaoImpl extends RootDao  implements CartItemDao{
 	public CartItem getCartItemById(int id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean deleteByIdOrder(int id) {
+		String sql = "delete from order_items where order_id = ?";
+		Connection connection = null;
+		PreparedStatement statement = null;		
+		try {
+			connection = getConnection();
+			statement = connection.prepareStatement(sql);
+			
+
+			statement.setInt(1, id);
+			
+			statement.executeUpdate();
+			
+			return true;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean delete(int id) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
