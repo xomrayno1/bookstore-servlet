@@ -59,7 +59,8 @@ CREATE TABLE `authors` (
   `author_ID` int(11) NOT NULL,
   `author_First_Name` varchar(200) NOT NULL,
   `author_Initials` varchar(200) NOT NULL,
-  `author_Last_Name` varchar(200) NOT NULL
+  `author_Last_Name` varchar(200) NOT NULL,
+  `status` tinyint(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -97,6 +98,7 @@ CREATE TABLE `books` (
   `images` varchar(50) NOT NULL,
   `price` int(11) NOT NULL,
   `createdate` date NOT NULL
+  ,`status` tinyint(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -181,6 +183,7 @@ CREATE TABLE `coupon` (
   `create` date NOT NULL,
   `start` date NOT NULL,
   `end` date NOT NULL
+  ,`status` tinyint(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -1111,6 +1114,7 @@ CREATE TABLE `users` (
   `role` varchar(20) NOT NULL,
   `create_date` date NOT NULL,
   `modify_date` date NOT NULL
+  ,`status` tinyint(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --

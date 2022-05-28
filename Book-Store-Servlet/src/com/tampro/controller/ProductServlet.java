@@ -38,13 +38,17 @@ public class ProductServlet extends HttpServlet{
 		int end = LIMIT * page;
 		
 		List<Books> lists = booksService.getAllBookByIdCategoryPagination(idCategory, start, end);
+ 
 		List<Books> listBooksCategory = booksService.getAllBookByIdCategory(idCategory);
 		int soPage = 0;
-		if(listBooksCategory.size() % 12  != 0) {
-			soPage = (listBooksCategory.size() / 12) + 1;
-		}else{
-			soPage  = listBooksCategory.size() / 12;
+		if(listBooksCategory != null ) {
+			if(listBooksCategory.size() % 12  != 0) {
+				soPage = (listBooksCategory.size() / 12) + 1;
+			}else{
+				soPage  = listBooksCategory.size() / 12;
+			}
 		}
+ 
 		req.setAttribute("soPage", soPage);
 		req.setAttribute("pageCurrent", page);
 		req.setAttribute("listP", lists);

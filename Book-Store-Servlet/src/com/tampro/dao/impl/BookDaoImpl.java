@@ -125,7 +125,7 @@ public class BookDaoImpl extends RootDao implements BookDao{
 			}
 		}
 		
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -179,7 +179,7 @@ public class BookDaoImpl extends RootDao implements BookDao{
 			}
 		}
 		
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override

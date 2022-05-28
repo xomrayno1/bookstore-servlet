@@ -4,10 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.jdbc.Statement;
 import com.tampro.dao.OrderDao;
 import com.tampro.dao.RootDao;
 import com.tampro.dao.UsersDao;
@@ -68,7 +68,7 @@ public class OrderDaoImpl  extends RootDao implements OrderDao{
 		PreparedStatement statement = null;		
 		try {
 			connection = getConnection();
-			statement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			statement.setInt(1, orders.getTotalPrice());
 			statement.setDate(2, orders.getDate());
 			statement.setInt(3, orders.getUsers().getId());
@@ -250,8 +250,9 @@ public class OrderDaoImpl  extends RootDao implements OrderDao{
 		Connection connection = null;
 		PreparedStatement statement = null;		
 		try {
+			 
 			connection = getConnection();
-			statement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			statement.setInt(1, orders.getTotalPrice());
 			statement.setDate(2, orders.getDate());
 			statement.setInt(3, orders.getUsers().getId());
